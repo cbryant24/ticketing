@@ -1,3 +1,3 @@
-let char="hello"
+let char = "hello!"
 
-var car="hell"
+var car = "hell!"
