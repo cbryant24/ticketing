@@ -1,37 +1,39 @@
+import mongoose from 'mongoose';
 import { Message } from 'node-nats-streaming';
 import { TicketUpdatedEvent } from '@cbtickets24/common';
-import mongoose from 'mongoose';
 import { TicketUpdatedListener } from '../ticket-updated-listener';
-import { Ticket } from '../../../models/ticket';
 import { natsWrapper } from '../../../nats-wrapper';
+import { Ticket } from '../../../models/ticket';
 
 const setup = async () => {
-  // create an instance of the listener
+  // Create a listener
   const listener = new TicketUpdatedListener(natsWrapper.client);
-  // create and save a ticket
+
+  // Create and save a ticket
   const ticket = Ticket.build({
-    id: new mongoose.Types.ObjectId().toHexString(),
+    id: mongoose.Types.ObjectId().toHexString(),
     title: 'concert',
     price: 20,
   });
-
   await ticket.save();
-  // create a fake data object
+
+  // Create a fake data object
   const data: TicketUpdatedEvent['data'] = {
-    version: ticket.version + 1,
     id: ticket.id,
+    version: ticket.version + 1,
     title: 'new concert',
     price: 999,
-    userId: new mongoose.Types.ObjectId().toHexString(),
+    userId: 'ablskdjf',
   };
 
-  // create a fake message event
+  // Create a fake msg object
   // @ts-ignore
   const msg: Message = {
     ack: jest.fn(),
   };
 
-  return { listener, data, msg, ticket };
+  // return all of this stuff
+  return { msg, data, ticket, listener };
 };
 
 it('finds, updates, and saves a ticket', async () => {
@@ -55,7 +57,7 @@ it('acks the message', async () => {
 });
 
 it('does not call ack if the event has a skipped version number', async () => {
-  const { msg, data, listener } = await setup();
+  const { msg, data, listener, ticket } = await setup();
 
   data.version = 10;
 

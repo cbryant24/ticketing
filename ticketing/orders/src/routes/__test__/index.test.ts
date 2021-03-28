@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import request from 'supertest';
 import { app } from '../../app';
+import { Order } from '../../models/order';
 import { Ticket } from '../../models/ticket';
 
 const buildTicket = async () => {
@@ -9,13 +10,12 @@ const buildTicket = async () => {
     title: 'concert',
     price: 20,
   });
-
   await ticket.save();
 
   return ticket;
 };
 
-it('fetches an order for a particular user', async () => {
+it('fetches orders for an particular user', async () => {
   // Create three tickets
   const ticketOne = await buildTicket();
   const ticketTwo = await buildTicket();
@@ -29,6 +29,7 @@ it('fetches an order for a particular user', async () => {
     .set('Cookie', userOne)
     .send({ ticketId: ticketOne.id })
     .expect(201);
+
   // Create two orders as User #2
   const { body: orderOne } = await request(app)
     .post('/api/orders')

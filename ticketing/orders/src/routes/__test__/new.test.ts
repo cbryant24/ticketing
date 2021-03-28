@@ -21,16 +21,13 @@ it('returns an error if the ticket is already reserved', async () => {
     title: 'concert',
     price: 20,
   });
-
   await ticket.save();
-
   const order = Order.build({
     ticket,
-    userId: 'kajwijoslkd',
+    userId: 'laskdflkajsdf',
     status: OrderStatus.Created,
     expiresAt: new Date(),
   });
-
   await order.save();
 
   await request(app)
@@ -46,7 +43,6 @@ it('reserves a ticket', async () => {
     title: 'concert',
     price: 20,
   });
-
   await ticket.save();
 
   await request(app)
@@ -62,7 +58,6 @@ it('emits an order created event', async () => {
     title: 'concert',
     price: 20,
   });
-
   await ticket.save();
 
   await request(app)

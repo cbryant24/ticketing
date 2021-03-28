@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 import { OrderStatus } from '@cbtickets24/common';
 import { TicketDoc } from './ticket';
-import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
 export { OrderStatus };
 
@@ -33,7 +33,7 @@ const orderSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      // enum: Object.values(OrderStatus),
+      enum: Object.values(OrderStatus),
       default: OrderStatus.Created,
     },
     expiresAt: {
