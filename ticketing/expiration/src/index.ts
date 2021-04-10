@@ -28,6 +28,7 @@ const start = async () => {
     new OrderCreatedListener(natsWrapper.client).listen();
   } catch (err) {
     console.error(err);
+    throw new Error('ERROR TRYING TO CONNECT TO SOMETHING');
   }
 };
 
